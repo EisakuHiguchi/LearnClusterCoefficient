@@ -35,7 +35,7 @@ public class ClusterCoefficient {
 				E[2 * i + 1] = swap;
 			}
 		}
-		sort(); // 枝の順番を始点について昇順にする
+		sort(E); // 枝の順番を始点について昇順にする
 		
 		for(int i = 0 ; i < 2 *M; i ++) {
 			K[E[i]]++;
@@ -43,7 +43,7 @@ public class ClusterCoefficient {
 		for(int i = 0; i < M; i++) {
 			P[E[2 * i]]++;
 		}
-		for(int i = 0; i < N; i++) {
+		for(int i = 1; i < N; i++) {
 			P[i] += P[i-1];
 		}
 		
@@ -81,19 +81,30 @@ public class ClusterCoefficient {
 		for(int i = 0; i < N ;i++) {
 			if(K[i] >= 2) {
 				Neff++;
-				Cl[i] = (double)(tri[i]/(K[i] * (K[i] - 1) / 2));
+				Cl[i] = (double)(tri[i]/(double)(K[i] * (K[i] - 1) / 2));
 				C += Cl[i];
 			}
-			C = C / Neff;
 		}
+		C = C / Neff;
 		return C;
 	}
 	
 	
 	/**
 	 * 枝は無向だが、E[2*i]を始点、E[2*i +1]を終点と呼ぶ。
+	 * 始点が昇順となるようにそろえる
 	 */
-	private void sort() {
+	private void sort(int[] E) {
+		int temp;
+		for(int i = 0; i < E.length; i = i + 2) {
+			for(int j = E.length - 2; j > i; j = j - 2) {
+				if(E[j - 2] > E[j]) {
+					temp = E[j];
+					E[j] = E[j + 2];
+					E[j + 2] = temp;
+				}
+			}
+		}
 		
 	}
 }
